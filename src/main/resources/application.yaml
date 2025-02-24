@@ -1,0 +1,17 @@
+spring:
+  application:
+    name: spring1-homework
+  
+server:
+  port: 8080
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+  api-docs:
+    path: /v3/api-docs
+
+logging:
+  level:
+    com.homework.spring1: DEBUG
+    org.springframework.web: INFO 

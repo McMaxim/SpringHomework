@@ -1,0 +1,11 @@
+spring:
+  application:
+    name: spring1-test
+
+server:
+  port: 0 # Случайный порт для тестов
+
+logging:
+  level:
+    com.homework.spring1: DEBUG
+    org.springframework.web: INFO 
