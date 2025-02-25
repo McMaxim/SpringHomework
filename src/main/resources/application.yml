@@ -1,0 +1,9 @@
+management:
+  endpoints:
+    web:
+      base-path: /admin
+      exposure:
+        include: '*'
+  endpoint:
+    shutdown:
+      enabled: false 
