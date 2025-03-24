@@ -1,10 +1,10 @@
 package com.homework.spring1;
 
 import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
 
-@SpringBootApplication
+@Configuration
 @ComponentScan(basePackages = "com.homework.spring1")
 public class Spring1ApplicationTest {
 

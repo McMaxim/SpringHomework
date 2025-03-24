@@ -1,9 +1,60 @@
+spring:
+  application:
+    name: spring1
+
+resilience4j:
+  circuitbreaker:
+    instances:
+      backendACircuitBreaker:
+        registerHealthIndicator: true
+        slidingWindowSize: 10
+        minimumNumberOfCalls: 5
+        permittedNumberOfCallsInHalfOpenState: 3
+        automaticTransitionFromOpenToHalfOpenEnabled: true
+        waitDurationInOpenState: 5s
+        failureRateThreshold: 50
+        eventConsumerBufferSize: 10
+      combinedCircuitBreaker:
+        registerHealthIndicator: true
+        slidingWindowSize: 10
+        minimumNumberOfCalls: 5
+        permittedNumberOfCallsInHalfOpenState: 3
+        automaticTransitionFromOpenToHalfOpenEnabled: true
+        waitDurationInOpenState: 5s
+        failureRateThreshold: 50
+        eventConsumerBufferSize: 10
+  
+  ratelimiter:
+    instances:
+      basicRateLimiter:
+        registerHealthIndicator: true
+        limitForPeriod: 5
+        limitRefreshPeriod: 10s
+        timeoutDuration: 3s
+      customRateLimiter:
+        registerHealthIndicator: true
+        limitForPeriod: 2
+        limitRefreshPeriod: 20s
+        timeoutDuration: 3s
+      combinedRateLimiter:
+        registerHealthIndicator: true
+        limitForPeriod: 3
+        limitRefreshPeriod: 15s
+        timeoutDuration: 5s
+
 management:
   endpoints:
     web:
       base-path: /admin
       exposure:
-        include: '*'
+        include: health,info,metrics,circuitbreakers,circuitbreakerevents,ratelimiters,ratelimiterevents
   endpoint:
     shutdown:
-      enabled: false 
+      enabled: false
+    health:
+      show-details: always
+  health:
+    circuitbreakers:
+      enabled: true
+    ratelimiters:
+      enabled: true 
