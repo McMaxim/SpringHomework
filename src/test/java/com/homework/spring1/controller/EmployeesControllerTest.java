@@ -1,8 +1,9 @@
 package com.homework.spring1.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.homework.spring1.Spring1ApplicationTest;
+import com.homework.spring1.Spring1Application;
 import com.homework.spring1.config.TestConfig;
+import com.homework.spring1.config.TestSecurityConfig;
 import com.homework.spring1.model.Employee;
 import com.homework.spring1.service.EmployeesService;
 import org.junit.jupiter.api.Test;
@@ -23,7 +24,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(controllers = EmployeesController.class)
-@ContextConfiguration(classes = {Spring1ApplicationTest.class, TestConfig.class})
+@ContextConfiguration(classes = {Spring1Application.class, TestConfig.class, TestSecurityConfig.class})
 @ActiveProfiles("test")
 class EmployeesControllerTest {
 

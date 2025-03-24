@@ -1,0 +1,20 @@
+spring:
+  application:
+    name: spring1-test
+
+resilience4j:
+  circuitbreaker:
+    instances:
+      testCircuitBreaker:
+        registerHealthIndicator: true
+        slidingWindowSize: 5
+        minimumNumberOfCalls: 3
+        permittedNumberOfCallsInHalfOpenState: 2
+        automaticTransitionFromOpenToHalfOpenEnabled: true
+        waitDurationInOpenState: 1s
+        failureRateThreshold: 50
+        eventConsumerBufferSize: 10
+
+testcontainers:
+  postgresql:
+    enabled: true 
