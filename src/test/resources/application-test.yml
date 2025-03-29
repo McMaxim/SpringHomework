@@ -1,6 +1,24 @@
 spring:
   application:
     name: spring1-test
+  datasource:
+    url: jdbc:tc:postgresql:13:///testdb
+    username: test
+    password: test
+    driver-class-name: org.testcontainers.jdbc.ContainerDatabaseDriver
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    properties:
+      hibernate:
+        format_sql: true
+        validator.apply_to_ddl: false
+      jakarta:
+        persistence:
+          validation:
+            mode: none
+  flyway:
+    enabled: false
 
 resilience4j:
   circuitbreaker:
@@ -17,4 +35,9 @@ resilience4j:
 
 testcontainers:
   postgresql:
-    enabled: true 
+    enabled: true
+
+logging:
+  level:
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE 

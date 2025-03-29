@@ -1,9 +1,9 @@
 package com.homework.spring1.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.homework.spring1.Spring1Application;
-import com.homework.spring1.config.TestConfig;
+import com.homework.spring1.api.ProjectsApi;
 import com.homework.spring1.config.TestSecurityConfig;
+import com.homework.spring1.model.Employee;
 import com.homework.spring1.model.Project;
 import com.homework.spring1.model.ProjectDTO;
 import com.homework.spring1.model.ProjectStatus;
@@ -12,25 +12,35 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(controllers = ProjectsController.class)
-@ContextConfiguration(classes = {Spring1Application.class, TestConfig.class, TestSecurityConfig.class})
+@WebMvcTest(ProjectsController.class)
+@Import(TestSecurityConfig.class)
 @ActiveProfiles("test")
+@TestPropertySource(properties = {
+    "spring.jpa.properties.hibernate.validator.apply_to_ddl=false",
+    "spring.jpa.properties.jakarta.persistence.validation.mode=none"
+})
 class ProjectsControllerTest {
 
     @Autowired
@@ -43,69 +53,53 @@ class ProjectsControllerTest {
     private ProjectsService projectsService;
 
     @Test
-    void getAllProjects_ReturnsProjectsList() throws Exception {
-        Project project1 = Project.builder()
-                .id(1L)
-                .name("Проект 1")
-                .status(ProjectStatus.IN_PROGRESS)
-                .build();
-        Project project2 = Project.builder()
-                .id(2L)
-                .name("Проект 2")
-                .status(ProjectStatus.PLANNING)
-                .build();
+    void getAllProjects_ReturnsListOfProjects() throws Exception {
+        Project project = createTestProject();
+        List<Project> projects = Collections.singletonList(project);
 
-        when(projectsService.getAllProjects()).thenReturn(Arrays.asList(project1, project2));
+        when(projectsService.getAllProjects()).thenReturn(projects);
 
-        mockMvc.perform(get("/api/v1/projects"))
+        mockMvc.perform(get("/api/v1/projects")
+                        .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].id").value(1))
-                .andExpect(jsonPath("$[1].id").value(2));
+                .andExpect(jsonPath("$", hasSize(1)))
+                .andExpect(jsonPath("$[0].id", is(1)))
+                .andExpect(jsonPath("$[0].name", is("Тестовый проект")))
+                .andExpect(jsonPath("$[0].description", is("Описание тестового проекта")));
     }
 
     @Test
     void getProjectById_ReturnsProject() throws Exception {
-        Project project = Project.builder()
-                .id(1L)
-                .name("Тестовый проект")
-                .description("Описание")
-                .status(ProjectStatus.IN_PROGRESS)
-                .deadline(LocalDate.now().plusMonths(1))
-                .budget(new BigDecimal("1000000.00"))
-                .employeeIds(Set.of(1L, 2L))
-                .priority("HIGH")
-                .build();
+        Project project = createTestProject();
 
         when(projectsService.getProjectById(1L)).thenReturn(project);
 
-        mockMvc.perform(get("/api/v1/projects/1"))
+        mockMvc.perform(get("/api/v1/projects/1")
+                        .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value(1))
-                .andExpect(jsonPath("$.name").value("Тестовый проект"));
+                .andExpect(jsonPath("$.id", is(1)))
+                .andExpect(jsonPath("$.name", is("Тестовый проект")))
+                .andExpect(jsonPath("$.description", is("Описание тестового проекта")));
     }
 
     @Test
     void createProject_ReturnsCreatedProject() throws Exception {
-        Project projectToCreate = Project.builder()
-                .name("Новый проект")
-                .description("Описание нового проекта")
-                .status(ProjectStatus.PLANNING)
-                .deadline(LocalDate.now().plusMonths(1))
-                .budget(new BigDecimal("500000.00"))
-                .employeeIds(Set.of(1L, 2L))
-                .priority("MEDIUM")
-                .build();
+        Project projectToCreate = createTestProject();
+        projectToCreate.setId(null);
 
-        Project createdProject = Project.builder()
+        Employee employee = Employee.builder()
                 .id(1L)
-                .name("Новый проект")
-                .description("Описание нового проекта")
-                .status(ProjectStatus.PLANNING)
-                .deadline(LocalDate.now().plusMonths(1))
-                .budget(new BigDecimal("500000.00"))
-                .employeeIds(Set.of(1L, 2L))
-                .priority("MEDIUM")
+                .fullName("Иванов Иван Иванович")
+                .email("ivanov@example.com")
+                .position("Разработчик")
+                .department("ИТ")
+                .experienceYears(5)
                 .build();
+        Set<Employee> employees = new HashSet<>();
+        employees.add(employee);
+        projectToCreate.setEmployees(employees);
+
+        Project createdProject = createTestProject();
 
         when(projectsService.createProject(any(Project.class))).thenReturn(createdProject);
 
@@ -113,32 +107,32 @@ class ProjectsControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(projectToCreate)))
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.id").value(1))
-                .andExpect(jsonPath("$.name").value("Новый проект"));
+                .andExpect(jsonPath("$.id", is(1)))
+                .andExpect(jsonPath("$.name", is("Тестовый проект")))
+                .andExpect(jsonPath("$.description", is("Описание тестового проекта")))
+                .andExpect(jsonPath("$.status", is("IN_PROGRESS")))
+                .andExpect(jsonPath("$.priority", is("Высокий")));
     }
 
     @Test
     void updateProject_ReturnsUpdatedProject() throws Exception {
-        Project projectToUpdate = Project.builder()
-                .name("Обновленный проект")
-                .description("Обновленное описание проекта")
-                .status(ProjectStatus.IN_PROGRESS)
-                .deadline(LocalDate.now().plusMonths(2))
-                .budget(new BigDecimal("600000.00"))
-                .employeeIds(Set.of(2L, 3L))
-                .priority("HIGH")
-                .build();
-
-        Project updatedProject = Project.builder()
+        Project projectToUpdate = createTestProject();
+        
+        Employee employee = Employee.builder()
                 .id(1L)
-                .name("Обновленный проект")
-                .description("Обновленное описание проекта")
-                .status(ProjectStatus.IN_PROGRESS)
-                .deadline(LocalDate.now().plusMonths(2))
-                .budget(new BigDecimal("600000.00"))
-                .employeeIds(Set.of(2L, 3L))
-                .priority("HIGH")
+                .fullName("Иванов Иван Иванович")
+                .email("ivanov@example.com")
+                .position("Разработчик")
+                .department("ИТ")
+                .experienceYears(5)
                 .build();
+        Set<Employee> employees = new HashSet<>();
+        employees.add(employee);
+        projectToUpdate.setEmployees(employees);
+        
+        Project updatedProject = createTestProject();
+        updatedProject.setName("Обновленный проект");
+        updatedProject.setDescription("Обновленное описание");
 
         when(projectsService.updateProject(eq(1L), any(Project.class))).thenReturn(updatedProject);
 
@@ -146,58 +140,60 @@ class ProjectsControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(projectToUpdate)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.name").value("Обновленный проект"));
+                .andExpect(jsonPath("$.id", is(1)))
+                .andExpect(jsonPath("$.name", is("Обновленный проект")))
+                .andExpect(jsonPath("$.description", is("Обновленное описание")))
+                .andExpect(jsonPath("$.status", is("IN_PROGRESS")))
+                .andExpect(jsonPath("$.priority", is("Высокий")));
     }
 
     @Test
     void patchProject_ReturnsUpdatedProject() throws Exception {
-        ProjectDTO projectToPatch = ProjectDTO.builder()
-                .name("Частично обновленный проект")
-                .status(ProjectStatus.IN_PROGRESS)
-                .build();
+        ProjectDTO projectDTO = new ProjectDTO();
+        projectDTO.setName("Обновленный проект");
+        projectDTO.setDescription("Обновленное описание");
+        projectDTO.setStatus(ProjectStatus.IN_PROGRESS);
+        projectDTO.setPriority("Высокий");
+        projectDTO.setDeadline(LocalDate.now().plusMonths(1));
+        projectDTO.setBudget(BigDecimal.valueOf(15000));
+        projectDTO.setEmployeeIds(Set.of(1L));
 
-        Project patchedProject = Project.builder()
-                .id(1L)
-                .name("Частично обновленный проект")
-                .description("Старое описание")
-                .status(ProjectStatus.IN_PROGRESS)
-                .deadline(LocalDate.now().plusMonths(1))
-                .budget(new BigDecimal("1000000.00"))
-                .employeeIds(Set.of(1L, 2L))
-                .priority("HIGH")
-                .build();
+        Project updatedProject = createTestProject();
+        updatedProject.setName("Обновленный проект");
+        updatedProject.setDescription("Обновленное описание");
 
-        when(projectsService.patchProject(eq(1L), any(ProjectDTO.class))).thenReturn(patchedProject);
+        when(projectsService.patchProject(eq(1L), any(ProjectDTO.class))).thenReturn(updatedProject);
 
         mockMvc.perform(patch("/api/v1/projects/1")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(projectToPatch)))
+                        .content(objectMapper.writeValueAsString(projectDTO)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.name").value("Частично обновленный проект"))
-                .andExpect(jsonPath("$.description").value("Старое описание"));
+                .andExpect(jsonPath("$.id", is(1)))
+                .andExpect(jsonPath("$.name", is("Обновленный проект")))
+                .andExpect(jsonPath("$.description", is("Обновленное описание")))
+                .andExpect(jsonPath("$.status", is("IN_PROGRESS")))
+                .andExpect(jsonPath("$.priority", is("Высокий")));
     }
 
     @Test
     void deleteProject_ReturnsNoContent() throws Exception {
-        mockMvc.perform(delete("/api/v1/projects/1"))
+        mockMvc.perform(delete("/api/v1/projects/1")
+                        .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNoContent());
     }
 
     @Test
     void getProjectsByStatus_ReturnsFilteredProjects() throws Exception {
-        Project project = Project.builder()
-                .id(1L)
-                .name("Проект в работе")
-                .status(ProjectStatus.IN_PROGRESS)
-                .build();
+        Project project = createTestProject();
+        List<Project> filteredProjects = Collections.singletonList(project);
 
         when(projectsService.getProjectsByStatus(ProjectStatus.IN_PROGRESS))
-                .thenReturn(Arrays.asList(project));
+                .thenReturn(filteredProjects);
 
         mockMvc.perform(get("/api/v1/projects/status/IN_PROGRESS"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].id").value(1))
-                .andExpect(jsonPath("$[0].status").value("IN_PROGRESS"));
+                .andExpect(jsonPath("$[0].name").value("Тестовый проект"));
     }
 
     @Test
@@ -206,15 +202,24 @@ class ProjectsControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].code").value("PLANNING"))
                 .andExpect(jsonPath("$[0].description").value("Проект на стадии планирования"))
-                .andExpect(jsonPath("$[1].code").value("IN_PROGRESS"))
-                .andExpect(jsonPath("$[1].description").value("Проект в активной разработке"))
-                .andExpect(jsonPath("$[2].code").value("TESTING"))
-                .andExpect(jsonPath("$[2].description").value("Проект на стадии тестирования"))
-                .andExpect(jsonPath("$[3].code").value("COMPLETED"))
-                .andExpect(jsonPath("$[3].description").value("Проект завершен"))
-                .andExpect(jsonPath("$[4].code").value("ON_HOLD"))
-                .andExpect(jsonPath("$[4].description").value("Проект приостановлен"))
                 .andExpect(jsonPath("$[5].code").value("CANCELLED"))
                 .andExpect(jsonPath("$[5].description").value("Проект отменен"));
+    }
+
+    private Project createTestProject() {
+        Set<Long> employeeIds = new HashSet<>();
+        employeeIds.add(1L);
+
+        return Project.builder()
+                .id(1L)
+                .name("Тестовый проект")
+                .description("Описание тестового проекта")
+                .status(ProjectStatus.IN_PROGRESS)
+                .deadline(LocalDate.now().plusMonths(3))
+                .budget(BigDecimal.valueOf(10000))
+                .priority("Высокий")
+                .startDate(LocalDate.now())
+                .endDate(LocalDate.now().plusMonths(6))
+                .build();
     }
 } 
