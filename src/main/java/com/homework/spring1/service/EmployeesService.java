@@ -1,7 +1,7 @@
 package com.homework.spring1.service;
 
 import com.homework.spring1.model.Employee;
-import com.homework.spring1.model.EmployeeDTO;
+import com.homework.spring1.dto.EmployeeDTO;
 
 import java.util.List;
 import java.util.concurrent.CompletableFuture;

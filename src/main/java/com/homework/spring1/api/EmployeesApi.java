@@ -1,7 +1,7 @@
 package com.homework.spring1.api;
 
 import com.homework.spring1.model.Employee;
-import com.homework.spring1.model.EmployeeDTO;
+import com.homework.spring1.dto.EmployeeDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;

@@ -1,7 +1,7 @@
 package com.homework.spring1.api;
 
 import com.homework.spring1.model.Project;
-import com.homework.spring1.model.ProjectDTO;
+import com.homework.spring1.dto.ProjectDTO;
 import com.homework.spring1.model.ProjectStatusInfo;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;

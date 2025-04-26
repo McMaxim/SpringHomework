@@ -1,7 +1,7 @@
 package com.homework.spring1.service;
 
 import com.homework.spring1.model.Project;
-import com.homework.spring1.model.ProjectDTO;
+import com.homework.spring1.dto.ProjectDTO;
 import com.homework.spring1.model.ProjectStatus;
 
 import java.util.List;
