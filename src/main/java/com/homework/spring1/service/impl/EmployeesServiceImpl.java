@@ -1,7 +1,7 @@
 package com.homework.spring1.service.impl;
 
 import com.homework.spring1.model.Employee;
-import com.homework.spring1.model.EmployeeDTO;
+import com.homework.spring1.dto.EmployeeDTO;
 import com.homework.spring1.repository.EmployeeRepository;
 import com.homework.spring1.service.EmployeesService;
 import jakarta.persistence.EntityNotFoundException;

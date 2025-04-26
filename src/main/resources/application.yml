@@ -1,14 +1,14 @@
 spring:
   application:
-    name: spring1
-  
+    name: Spring1
+
   # Настройки источника данных (DataSource)
   datasource:
-    url: jdbc:postgresql://localhost:5432/postgres?currentSchema=public
+    url: jdbc:postgresql://localhost:5432/homework5
     username: postgres
     password: postgres
     driver-class-name: org.postgresql.Driver
-  
+
   # Настройки JPA
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
@@ -19,7 +19,7 @@ spring:
     # Настройки Hibernate
     hibernate:
       ddl-auto: validate
-  
+
   # Настройки Flyway
   flyway:
     enabled: true
@@ -47,7 +47,7 @@ resilience4j:
         waitDurationInOpenState: 5s
         failureRateThreshold: 50
         eventConsumerBufferSize: 10
-  
+
   ratelimiter:
     instances:
       basicRateLimiter:
@@ -81,9 +81,18 @@ management:
     circuitbreakers:
       enabled: true
     ratelimiters:
-      enabled: true 
+      enabled: true
 
 logging:
   level:
     org.hibernate.SQL: DEBUG
-    org.hibernate.type.descriptor.sql.BasicBinder: TRACE 
+    org.hibernate.type.descriptor.sql.BasicBinder: DEBUG
+
+server:
+   port: 8080
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+  api-docs:
+    path: /v3/api-docs

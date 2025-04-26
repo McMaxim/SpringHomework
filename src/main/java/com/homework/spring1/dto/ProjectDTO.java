@@ -1,6 +1,9 @@
-package com.homework.spring1.model;
+package com.homework.spring1.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.homework.spring1.model.Employee;
+import com.homework.spring1.model.Project;
+import com.homework.spring1.model.ProjectStatus;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

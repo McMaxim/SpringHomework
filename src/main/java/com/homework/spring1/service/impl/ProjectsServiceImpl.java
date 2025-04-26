@@ -1,7 +1,7 @@
 package com.homework.spring1.service.impl;
 
 import com.homework.spring1.model.Project;
-import com.homework.spring1.model.ProjectDTO;
+import com.homework.spring1.dto.ProjectDTO;
 import com.homework.spring1.model.ProjectStatus;
 import com.homework.spring1.repository.EmployeeRepository;
 import com.homework.spring1.repository.ProjectRepository;
@@ -18,12 +18,7 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor

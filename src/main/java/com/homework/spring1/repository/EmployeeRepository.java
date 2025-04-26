@@ -11,17 +11,13 @@ import java.util.Optional;
 
 @Repository
 public interface EmployeeRepository extends JpaRepository<Employee, Long> {
-    
-    Optional<Employee> findByEmail(String email);
-    
+
     List<Employee> findByDepartment(String department);
     
     List<Employee> findByPositionContaining(String position);
     
     List<Employee> findByExperienceYearsGreaterThan(Integer experienceYears);
-    
-    List<Employee> findByFullNameContainingIgnoreCase(String fullName);
-    
+
     @Query("SELECT e FROM Employee e JOIN e.projects p WHERE p.name = :projectName")
     List<Employee> findEmployeesByProjectName(@Param("projectName") String projectName);
 } 

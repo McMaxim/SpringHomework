@@ -15,16 +15,4 @@ import java.util.List;
 public interface ProjectRepository extends JpaRepository<Project, Long> {
     
     List<Project> findByStatus(ProjectStatus status);
-    
-    List<Project> findByNameContainingIgnoreCase(String name);
-    
-    List<Project> findByDeadlineBefore(LocalDate date);
-    
-    List<Project> findByBudgetGreaterThanEqual(BigDecimal budget);
-    
-    @Query("SELECT p FROM Project p JOIN p.employees e WHERE e.id = :employeeId")
-    List<Project> findByEmployeeId(@Param("employeeId") Long employeeId);
-    
-    @Query("SELECT p FROM Project p WHERE p.priority = :priority AND p.status = :status")
-    List<Project> findByPriorityAndStatus(@Param("priority") String priority, @Param("status") ProjectStatus status);
 } 

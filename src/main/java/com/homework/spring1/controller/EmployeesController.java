@@ -2,7 +2,7 @@ package com.homework.spring1.controller;
 
 import com.homework.spring1.api.EmployeesApi;
 import com.homework.spring1.model.Employee;
-import com.homework.spring1.model.EmployeeDTO;
+import com.homework.spring1.dto.EmployeeDTO;
 import com.homework.spring1.service.EmployeesService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

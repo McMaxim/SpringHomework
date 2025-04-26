@@ -2,7 +2,7 @@ package com.homework.spring1.controller;
 
 import com.homework.spring1.api.ProjectsApi;
 import com.homework.spring1.model.Project;
-import com.homework.spring1.model.ProjectDTO;
+import com.homework.spring1.dto.ProjectDTO;
 import com.homework.spring1.model.ProjectStatus;
 import com.homework.spring1.model.ProjectStatusInfo;
 import com.homework.spring1.service.ProjectsService;

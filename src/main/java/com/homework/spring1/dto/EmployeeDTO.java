@@ -1,6 +1,8 @@
-package com.homework.spring1.model;
+package com.homework.spring1.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.homework.spring1.model.Employee;
+import com.homework.spring1.model.Project;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
