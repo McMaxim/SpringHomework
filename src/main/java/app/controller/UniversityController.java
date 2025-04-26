@@ -1,31 +1,32 @@
 package app.controller;
 
+import app.dto.UniversityDto;
 import app.model.UniversityEntity;
-import app.service.UniversityService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RestController
 @RequestMapping("/api/university")
-public class UniversityController {
-    private final UniversityService universityService;
+@Tag(name = "University API", description = "Управление Университетом")
+public interface UniversityController {
 
-    public UniversityController(UniversityService universityService) {
-        this.universityService = universityService;
-    }
-
+    @Operation(summary = "получение университетов по идентификатора пользователя")
+    @ApiResponse(responseCode = "200", description = "университеты найдены")
     @GetMapping("/user/{id}")
-    public ResponseEntity<List<UniversityEntity>> findAllByUserId(@PathVariable Long id) {
-        return ResponseEntity.status(HttpStatus.OK)
-                .body(universityService.findAllByUserId(id));
-    }
+    ResponseEntity<List<UniversityDto>> findAllByUserId(@PathVariable Long id);
 
-    @PutMapping("/user/{id}")
-    public ResponseEntity<List<UniversityEntity>> addUniversityByUserId(@PathVariable Long usarId, @RequestBody UniversityEntity universityEntity) {
-        universityService.addUniversityByUserId(universityEntity);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
-    }
+    @Operation(summary = " добавление университета по идентификатора пользователя")
+    @ApiResponse(responseCode = "200", description = "университеты найдены")
+    @PutMapping("/user/{userId}")
+    ResponseEntity<List<UniversityDto>> addUniversityByUserId(@PathVariable Long userId, @RequestBody UniversityDto universityDto);
+
+    @Operation(summary = "удаление  университета")
+    @ApiResponse(responseCode = "200", description = "университет удалён")
+    @DeleteMapping("/{id}")
+    ResponseEntity<HttpStatus> delete(@PathVariable Long id);
 }

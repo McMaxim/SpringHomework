@@ -1,5 +1,14 @@
 package app.model;
 
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
+
+import java.util.Objects;
+
+@Builder
+@Getter
+@Setter
 public class BookEntity {
 
     private Long id;
@@ -18,35 +27,16 @@ public class BookEntity {
         this.publisher = publisher;
     }
 
-    public Long getId() {
-        return id;
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        BookEntity that = (BookEntity) o;
+        return Objects.equals(id, that.id) && Objects.equals(title, that.title) && Objects.equals(author, that.author) && Objects.equals(publisher, that.publisher);
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getAuthor() {
-        return author;
-    }
-
-    public void setAuthor(String author) {
-        this.author = author;
-    }
-
-    public String getPublisher() {
-        return publisher;
-    }
-
-    public void setPublisher(String publisher) {
-        this.publisher = publisher;
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, title, author, publisher);
     }
 }
+

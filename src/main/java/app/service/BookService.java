@@ -1,5 +1,6 @@
 package app.service;
 
+import app.dto.BookDto;
 import app.model.BookEntity;
 import org.springframework.stereotype.Service;
 
@@ -9,7 +10,13 @@ import java.util.ArrayList;
 public interface BookService {
 
 
-    public void save(BookEntity bookEntity);
+    public void save(BookDto bookDto);
 
-    public ArrayList<BookEntity> findAllByUserId(Long id);
+    public ArrayList<BookDto> findAllByUserId(Long id);
+
+    public BookDto findById(Long id);
+
+    BookDto delete(Long id);
+
+    BookDto update(BookDto bookDto);
 }

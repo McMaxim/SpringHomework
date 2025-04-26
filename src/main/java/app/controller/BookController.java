@@ -1,34 +1,44 @@
 package app.controller;
 
+import app.dto.BookDto;
 import app.model.BookEntity;
-import app.service.BookService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RestController
 @RequestMapping("/api/books")
-public class BookController {
-    private final BookService bookService;
+@Tag(name = "Book API", description = "Управление Книгам")
+public interface BookController {
 
-    @Autowired
-    public BookController(BookService bookService) {
-        this.bookService = bookService;
-    }
-
-
+    @Operation(summary = " получение книгов по идентификатора пользователя")
+    @ApiResponse(responseCode = "200", description = "список книг")
     @GetMapping("/users/{id}")
-    public ResponseEntity<List<BookEntity>> findAllByUserId(@PathVariable Long id) {
-        return ResponseEntity.status(HttpStatus.OK)
-                .body(bookService.findAllByUserId(id));
-    }
+    ResponseEntity<List<BookDto>> findAllByUserId(@PathVariable Long id);
 
+    @Operation(summary = "добавление книг пользователю")
+    @ApiResponse(responseCode = "200", description = "пользовател удалён")
     @PutMapping("/users/{id}")
-    public ResponseEntity<List<BookEntity>> addBookToUserById(@PathVariable Long id, @RequestBody BookEntity book) {
-        bookService.save(book);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
-    }
+    ResponseEntity<List<BookDto>> addBookToUserById(@PathVariable Long id, @RequestBody BookDto book);
+
+    @Operation(summary = "удаление  книг")
+    @ApiResponse(responseCode = "200", description = "книга удалён")
+    @DeleteMapping("/{id}")
+    ResponseEntity<BookDto> delete(@PathVariable Long id);
+
+
+    @Operation(summary = "найти книгу по id")
+    @ApiResponse(responseCode = "200", description = "книга найден")
+    @GetMapping("/{id}")
+    ResponseEntity<BookDto> findById(@PathVariable Long id);
+
+    @Operation(summary = "найти книгу по id")
+    @ApiResponse(responseCode = "200", description = "книга найден")
+    @PutMapping("/{id}")
+    ResponseEntity<BookDto> update(@RequestBody BookDto book);
+
+
 }

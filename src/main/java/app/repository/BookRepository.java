@@ -17,7 +17,18 @@ public class BookRepository {
         return temp;
     }
 
-    public Long save(BookEntity bookEntity) {
-        return 3L;
+    public BookEntity save(BookEntity bookEntity) {
+        return new BookEntity();
+    }
+
+    public BookEntity delete(Long id) {
+        return null;
+    }
+
+    public BookEntity findById(Long id) {
+        return BookEntity.builder()
+                .id(1l)
+                .title("title1")
+                .build();
     }
 }

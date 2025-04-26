@@ -1,28 +1,30 @@
 package app.controller;
 
+import app.dto.UserDto;
 import app.model.UserEntity;
-import app.service.UserService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-@RestController
 @RequestMapping("/api/users")
-public class UserController {
-    private final UserService userService;
+@Tag(name = "User API", description = "Управление пользователями")
+public interface UserController {
 
-    public UserController(UserService userService) {
-        this.userService = userService;
-    }
-
+    @Operation(summary = "сохранение пользователя")
+    @ApiResponse(responseCode = "200", description = "Пользователь сахранон")
     @PostMapping()
-    public ResponseEntity<Long> save(@RequestBody UserEntity userEntity) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(userService.save(userEntity));
-    }
+    ResponseEntity<Long> save(@RequestBody UserDto userDto);
 
+    @Operation(summary = "Получить пользователя по ID")
+    @ApiResponse(responseCode = "200", description = "Пользователь найден")
     @GetMapping("/{id}")
-    public ResponseEntity<UserEntity> findById(@PathVariable Long id) {
-        UserEntity userEntity = userService.findById(id);
-        return ResponseEntity.status(HttpStatus.OK).body(userEntity);
-    }
+    ResponseEntity<UserDto> findById(@PathVariable Long id);
+
+    @Operation(summary = "удаление  пользователя")
+    @ApiResponse(responseCode = "200", description = "Пользователь удалён")
+    @DeleteMapping("/{id}")
+    ResponseEntity<HttpStatus> delete(@PathVariable Long id);
 }

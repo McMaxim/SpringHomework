@@ -1,5 +1,12 @@
 package app.model;
 
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
+
+@Builder
+@Getter
+@Setter
 public class CourseEntity {
     private Long id;
     private String title;
@@ -13,19 +20,4 @@ public class CourseEntity {
         this.title = title;
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
 }

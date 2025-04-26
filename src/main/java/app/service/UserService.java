@@ -1,5 +1,6 @@
 package app.service;
 
+import app.dto.UserDto;
 import app.model.UserEntity;
 import org.springframework.stereotype.Service;
 
@@ -7,7 +8,9 @@ import org.springframework.stereotype.Service;
 public interface UserService {
 
 
-    public Long save(UserEntity userEntity);
+    public Long save(UserDto userDto);
 
-    public UserEntity findById(Long id);
+    public UserDto findById(Long id);
+
+    void delete(Long id);
 }

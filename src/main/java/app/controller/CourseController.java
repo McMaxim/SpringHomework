@@ -1,31 +1,32 @@
 package app.controller;
 
+import app.dto.CourseDto;
 import app.model.CourseEntity;
-import app.service.CourseService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RestController
 @RequestMapping("/api/courses")
-public class CourseController {
-    private final CourseService courseService;
+@Tag(name = "Course API", description = "Управление Курсом")
+public interface CourseController {
 
-    public CourseController(CourseService courseService) {
-        this.courseService = courseService;
-    }
-
+    @Operation(summary = "сполучение Курсов по идентификатора пользователя")
+    @ApiResponse(responseCode = "200", description = "список курсов")
     @GetMapping("/user/{id}")
-    public ResponseEntity<List<CourseEntity>> findAllByUserId(@PathVariable Long id) {
-        return ResponseEntity.status(HttpStatus.OK)
-                .body(courseService.findAllByUserId(id));
-    }
+    ResponseEntity<List<CourseDto>> findAllByUserId(@PathVariable Long id);
 
-    @PutMapping("/user/{id}")
-    public ResponseEntity<List<CourseEntity>> save(@PathVariable Long userId, @RequestBody CourseEntity courseEntity) {
-        courseService.save(userId, courseEntity);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
-    }
+    @Operation(summary = "сохранение  Курсоа")
+    @ApiResponse(responseCode = "200", description = "Курс сохранон")
+    @PostMapping("")
+    ResponseEntity<List<CourseDto>> save(@RequestBody CourseDto courseDto);
+
+    @Operation(summary = "удаление  Курса")
+    @ApiResponse(responseCode = "200", description = "Курс удалён")
+    @DeleteMapping("/{id}")
+    ResponseEntity<HttpStatus> delete(@PathVariable Long id);
 }
