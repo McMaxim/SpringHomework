@@ -8,9 +8,14 @@ import app.model.CourseEntity;
 import app.repository.CourseRepository;
 import app.service.CourseService;
 import org.modelmapper.ModelMapper;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+
 @Service
 public class CourseServiceImpl implements CourseService {
 
@@ -21,13 +26,18 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    public Long save( CourseDto courseDto) {
+    @Caching(
+            put = { @CachePut(value = "course", key = "#id") },
+            evict = { @CacheEvict(value = "courses", allEntries = true) }
+    )
+    public Long save(CourseDto courseDto) {
         CourseEntity courseEntity = new ModelMapper().map(courseDto, CourseEntity.class);
         Long courseId = courseRepository.save(courseEntity);
         return courseId;
     }
 
     @Override
+    @Cacheable(value = "Courses", key = "#id")
     public ArrayList<CourseDto> findAllByUserId(Long id) {
         ArrayList<CourseEntity> courses = courseRepository.findAllByUserId(id);
         ArrayList<CourseDto> courseDtos = new ArrayList<>();

@@ -19,13 +19,13 @@ public class LoggingAspect {
     log.info("Перед вызовом метода: " + joinPoint.getSignature().getName());
   }
 
-  // Самый мощный совет, контролирует выполнение метода
-  @Around("execution(* app.controller.*.*(..))")
-  public void measureExecutionTime(ProceedingJoinPoint joinPoint) throws Throwable {
-    long startTime = System.currentTimeMillis();
-    joinPoint.proceed(); // Вызов целевого метода
-    long duration = System.currentTimeMillis() - startTime;
-    log.info("Метод " + joinPoint.getSignature().getName()
-            + " выполнен за " + duration + " мс");
-  }
+//  // Самый мощный совет, контролирует выполнение метода
+//  @Around("execution(* app.controller.*.*(..))")
+//  public void measureExecutionTime(ProceedingJoinPoint joinPoint) throws Throwable {
+//    long startTime = System.currentTimeMillis();
+//    Object proceed = joinPoint.proceed();// Вызов целевого метода
+//    long duration = System.currentTimeMillis() - startTime;
+//    log.info("Метод " + joinPoint.getSignature().getName()
+//            + " выполнен за " + duration + " мс");
+//  }
 }

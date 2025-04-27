@@ -6,6 +6,7 @@ import app.model.BookEntity;
 import app.repository.BookRepository;
 import app.service.BookService;
 import org.modelmapper.ModelMapper;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -44,6 +45,7 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
+    @Async("taskExecutor")
     public BookDto delete(Long id) {
         BookEntity bookEntity = bookRepository.delete(id);
         return new ModelMapper().map(bookEntity, BookDto.class);
