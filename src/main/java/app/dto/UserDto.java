@@ -5,15 +5,15 @@ import app.model.CourseEntity;
 import app.model.UniversityEntity;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Size;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.ArrayList;
 
 @Builder
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class UserDto {
 
     private Long id;
