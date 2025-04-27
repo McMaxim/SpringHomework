@@ -1,0 +1,24 @@
+spring:
+  application:
+    name: "app"
+
+server:
+  port: 8080
+
+#  swagger
+springdoc:
+  swagger-ui:
+    enabled: true
+    path: /swagger-ui.html
+
+#    actuator
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+        exclude: shutdown
+      base-path: "/admin/actuator"
+  info:
+    env:
+      enabled: true
