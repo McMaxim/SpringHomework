@@ -15,11 +15,6 @@ import java.util.List;
 @Tag(name = "Course API", description = "Управление Курсом")
 public interface CourseController {
 
-    @Operation(summary = "сполучение Курсов по идентификатора пользователя")
-    @ApiResponse(responseCode = "200", description = "список курсов")
-    @GetMapping("/user/{id}")
-    ResponseEntity<List<CourseDto>> findAllByUserId(@PathVariable Long id);
-
     @Operation(summary = "сохранение  Курсоа")
     @ApiResponse(responseCode = "200", description = "Курс сохранон")
     @PostMapping("")

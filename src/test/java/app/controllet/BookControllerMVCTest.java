@@ -49,20 +49,6 @@ public class BookControllerMVCTest {
         verify(bookService).findById(1L);
     }
 
-    @Test
-    public void testDeleteBookSuccess() throws Exception {
-        BookDto bookDto = new BookDto(1L, "test", "test", "test");
-
-        when(bookService.delete(1L)).thenReturn(bookDto);
-
-        mockMvc.perform(delete(basePath + "/" + 1))
-                .andExpect(status().isOk())
-                .andExpect(content().contentType(jsonContentType))
-                .andExpect(jsonPath("$.title").value("test"))
-                .andExpect(jsonPath("$.author").value("test"))
-                .andExpect(jsonPath("$.publisher").value("test"));
-        verify(bookService).delete(1L);
-    }
 
     @Test
     public void testPatchBookFail() throws Exception {

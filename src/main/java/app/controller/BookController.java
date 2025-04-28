@@ -5,6 +5,7 @@ import app.model.BookEntity;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,7 +28,7 @@ public interface BookController {
     @Operation(summary = "удаление  книг")
     @ApiResponse(responseCode = "200", description = "книга удалён")
     @DeleteMapping("/{id}")
-    ResponseEntity<BookDto> delete(@PathVariable Long id);
+    ResponseEntity<HttpStatus> delete(@PathVariable Long id);
 
 
     @Operation(summary = "найти книгу по id")

@@ -32,9 +32,9 @@ public class BookControllerImpl implements BookController {
     }
 
     @Override
-    public ResponseEntity<BookDto> delete(Long id) {
-        BookDto bookDto = bookService.delete(id);
-        return ResponseEntity.status(HttpStatus.OK).body(bookDto);
+    public ResponseEntity<HttpStatus> delete(Long id) {
+        bookService.delete(id);
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
 
     @Override

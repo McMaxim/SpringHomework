@@ -25,7 +25,7 @@ public class PostgreSqlContainerTest {
     @Container
     @ServiceConnection
     static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:15-alpine")
-            .withDatabaseName("testdb")
+            .withDatabaseName("my_postgres")
             .withUsername("postgres")
             .withPassword("postgres")
             .withInitScript("init.sql");

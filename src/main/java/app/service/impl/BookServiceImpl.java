@@ -28,27 +28,25 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public ArrayList<BookDto> findAllByUserId(Long id) {
-        ArrayList<BookEntity> books = bookRepository.findAllByUserId(id);
+        ArrayList<BookEntity> books = bookRepository.findAllByUserEntity_Id(id);
         ArrayList<BookDto> bookDtos = new ArrayList<>();
         for (BookEntity bookEntity : books) {
             BookDto map = new ModelMapper().map(bookEntity, BookDto.class);
             bookDtos.add(map);
         }
-
         return bookDtos;
     }
 
     @Override
     public BookDto findById(Long id) {
-        BookEntity bookEntity = bookRepository.findById(id);
+        BookEntity bookEntity = bookRepository.findById(id).get();
         return new ModelMapper().map(bookEntity, BookDto.class);
     }
 
     @Override
     @Async("taskExecutor")
-    public BookDto delete(Long id) {
-        BookEntity bookEntity = bookRepository.delete(id);
-        return new ModelMapper().map(bookEntity, BookDto.class);
+    public void delete(Long id) {
+        bookRepository.deleteById(id);
     }
 
     @Override

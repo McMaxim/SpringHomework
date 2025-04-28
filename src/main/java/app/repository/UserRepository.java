@@ -1,21 +1,11 @@
 package app.repository;
 
 import app.model.UserEntity;
-import org.springframework.stereotype.Repository;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-@Repository
-public class UserRepository {
+import java.util.Optional;
 
+public interface UserRepository extends JpaRepository<UserEntity, Long> {
 
-    public UserEntity findById(Long id) {
-
-        UserEntity userEntity = new UserEntity();
-        userEntity.setId(id);
-        userEntity.setName("Максим");
-        return userEntity;
-    }
-
-    public Long save(UserEntity user) {
-        return 3L;
-    }
+    Optional<UserEntity> findByEmail(String email);
 }

@@ -1,23 +1,9 @@
 package app.repository;
 
 import app.model.UniversityEntity;
-import org.springframework.stereotype.Repository;
+import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.ArrayList;
 
-@Repository
-public class UniversityRepository {
-
-    private ArrayList<UniversityEntity> temp = new ArrayList<>();
-
-    public ArrayList<UniversityEntity> findAllByUserId(Long id) {
-
-        temp.add(new UniversityEntity(1L, "UniversityName1"));
-        temp.add(new UniversityEntity(2L, "UniversityName2"));
-        return temp;
-    }
-
-    public Long save(UniversityEntity universityEntity) {
-        return 2L;
-    }
+public interface UniversityRepository extends JpaRepository<UniversityEntity, Long> {
 }

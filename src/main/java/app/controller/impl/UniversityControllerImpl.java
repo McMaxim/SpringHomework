@@ -18,16 +18,6 @@ public class UniversityControllerImpl implements UniversityController {
         this.universityService = universityService;
     }
 
-    public ResponseEntity<List<UniversityDto>> findAllByUserId(@PathVariable Long id) {
-        return ResponseEntity.status(HttpStatus.OK)
-                .body(universityService.findAllByUserId(id));
-    }
-
-    public ResponseEntity<List<UniversityDto>> addUniversityByUserId(@PathVariable Long userId, @RequestBody UniversityDto universityDto) {
-        universityService.addUniversityByUserId(universityDto);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
-    }
-
     @Override
     public ResponseEntity<HttpStatus> delete(Long id) {
         universityService.delete(id);

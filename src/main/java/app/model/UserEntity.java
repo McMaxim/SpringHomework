@@ -1,45 +1,40 @@
 package app.model;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import jakarta.persistence.*;
+import lombok.*;
 
 import java.util.ArrayList;
+import java.util.Set;
 
 @Builder
 @Getter
 @Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@Entity
+@Table(name = "users")
 public class UserEntity {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
     private String surname;
     private String password;
     private String email;
-    private String phone;
-    private String address;
-    private ArrayList<BookEntity> books;
-    private ArrayList<CourseEntity> courses;
-    private ArrayList<UniversityEntity> universities;
-
-
-    public UserEntity() {
-    }
+    @OneToMany
+    private ArrayList<BookEntity> bookEntities;
+    @OneToMany
+    private ArrayList<CourseEntity> courseEntities;
 
     public UserEntity(Long id, String name) {
         this.id = id;
         this.name = name;
     }
 
-    public UserEntity(Long id, String name, String surname, String password, String email, String phone, String address, ArrayList<BookEntity> books, ArrayList<CourseEntity> courses, ArrayList<UniversityEntity> universities) {
-        this.id = id;
+    public UserEntity(String name, String surname, String password, String email) {
         this.name = name;
         this.surname = surname;
         this.password = password;
         this.email = email;
-        this.phone = phone;
-        this.address = address;
-        this.books = books;
-        this.courses = courses;
-        this.universities = universities;
     }
 }

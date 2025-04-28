@@ -6,6 +6,10 @@ import app.repository.UserRepository;
 import app.service.UserService;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
+
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -17,16 +21,17 @@ public class UserServiceImpl implements UserService {
         this.userRepository = userRepository;
     }
 
+    @Transactional(isolation = Isolation.READ_COMMITTED, rollbackFor = Exception.class, timeout = 1000, readOnly = false,propagation = Propagation.REQUIRED)
     @Override
     public Long save(UserDto userDto) {
         UserEntity userEntity = new ModelMapper().map(userDto, UserEntity.class);
-        Long userId = userRepository.save(userEntity);
-        return userId;
+        UserEntity userEntity1 = userRepository.save(userEntity);
+        return userEntity1.getId();
     }
 
     @Override
     public UserDto findById(Long id) {
-        UserEntity user = userRepository.findById(id);
+        UserEntity user = userRepository.findById(id).get();
         return new ModelMapper().map(user, UserDto.class);
     }
 

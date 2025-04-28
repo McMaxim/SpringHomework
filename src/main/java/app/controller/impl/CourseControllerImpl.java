@@ -18,11 +18,6 @@ public class CourseControllerImpl implements CourseController {
         this.courseService = courseService;
     }
 
-    public ResponseEntity<List<CourseDto>> findAllByUserId(@PathVariable Long id) {
-        return ResponseEntity.status(HttpStatus.OK)
-                .body(courseService.findAllByUserId(id));
-    }
-
     public ResponseEntity<List<CourseDto>> save( @RequestBody CourseDto courseDto) {
         courseService.save(courseDto);
         return ResponseEntity.status(HttpStatus.CREATED).build();
