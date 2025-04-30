@@ -10,3 +10,15 @@ spring:
     keyspace-name: my_keyspace
     port: 9042
     contact-points: localhost
+
+  kafka:
+    bootstrap-servers: localhost:9092
+    consumer:
+      group-id: my-group
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+
+my-topic: topic1

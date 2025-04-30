@@ -9,7 +9,7 @@
         <relativePath/>
     </parent>
     <groupId>org.app</groupId>
-    <artifactId>hw2mts</artifactId>
+    <artifactId>homework</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>hw2mts</name>
     <description>hw2mts</description>
@@ -68,6 +68,19 @@
         <dependency>
             <groupId>org.testcontainers</groupId>
             <artifactId>cassandra</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.kafka</groupId>
+            <artifactId>spring-kafka</artifactId>
+        </dependency>
+
+
+        <dependency>
+            <groupId>org.testcontainers</groupId>
+            <artifactId>kafka</artifactId>
+            <version>1.19.7</version>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 

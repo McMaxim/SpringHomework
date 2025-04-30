@@ -1,12 +1,14 @@
 package app.service;
 
 ;
+import app.dto.UserAuditDto;
 import app.model.Action;
 import app.model.UserAudit;
 import app.model.UserAuditKey;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.testcontainers.containers.CassandraContainer;
 import org.testcontainers.junit.jupiter.Container;
@@ -57,8 +59,8 @@ class UserAuditServiceTest {
         String eventDetails = "test event";
         UserAudit userAudit = new UserAudit(userAuditKey, Action.INSERT, eventDetails);
         userAuditService.save(userAudit);
-        UserAudit userAudit1 = userAuditService.findById(userAuditKey);
-        assertEquals(eventDetails, userAudit1.getEventDetails());
+        UserAuditDto userAuditDto = userAuditService.findById(userAuditKey);
+        assertEquals(eventDetails, userAuditDto.getEventDetails());
     }
 
     @Test
