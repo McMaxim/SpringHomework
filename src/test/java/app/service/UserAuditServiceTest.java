@@ -1,16 +1,23 @@
 package app.service;
 
 ;
+import app.config.KafkaTopicConfig;
 import app.dto.UserAuditDto;
 import app.model.Action;
 import app.model.UserAudit;
 import app.model.UserAuditKey;
+import org.apache.kafka.clients.admin.NewTopic;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.kafka.KafkaAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
+import org.springframework.context.annotation.Import;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.testcontainers.containers.CassandraContainer;
+import org.testcontainers.containers.KafkaContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 import org.testcontainers.utility.DockerImageName;
@@ -24,9 +31,17 @@ import static org.junit.Assert.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
-@SpringBootTest
+@SpringBootTest(properties = {"my-topic=topic1",
+        "spring.kafka.consumer.group-id=my-group"
+})
+@Import({KafkaAutoConfiguration.class, KafkaTopicConfig.class})
+
 @Testcontainers
 class UserAuditServiceTest {
+
+    @Container
+    @ServiceConnection
+    public static final KafkaContainer KAFKA = new KafkaContainer(DockerImageName.parse("confluentinc/cp-kafka:7.4.0"));
 
     @Container
     private static final CassandraContainer<?> cassandraContainer =
@@ -35,6 +50,14 @@ class UserAuditServiceTest {
                     .withStartupTimeout(Duration.ofSeconds(60));
     @Autowired
     private UserAuditService userAuditService;
+
+    @Autowired
+    private KafkaTemplate<String, String> kafkaTemplate;
+
+
+
+    @Autowired
+    private NewTopic topic;
 
     @BeforeAll
     static void setUp() {
@@ -49,6 +72,7 @@ class UserAuditServiceTest {
         String eventDetails = "test event";
         UserAudit userAudit = new UserAudit(userAuditKey, Action.INSERT, eventDetails);
         userAuditService.save(userAudit);
+        kafkaTemplate.send(topic.name(), userAuditKey.toString());
         List<UserAudit> users = userAuditService.findAll();
         assertFalse(users.isEmpty());
     }
