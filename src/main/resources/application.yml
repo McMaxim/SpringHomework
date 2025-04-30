@@ -1,0 +1,24 @@
+server:
+  port: 8080
+
+spring:
+  cassandra:
+    password: cassandra
+    username: cassandra
+    schema-action: create_if_not_exists
+    local-datacenter: datacenter1
+    keyspace-name: my_keyspace
+    port: 9042
+    contact-points: localhost
+
+  kafka:
+    bootstrap-servers: localhost:9092
+    consumer:
+      group-id: my-group
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+
+my-topic: topic1
