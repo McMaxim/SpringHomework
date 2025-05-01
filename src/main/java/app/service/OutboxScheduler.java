@@ -2,7 +2,6 @@ package app.service;
 
 import app.model.Outbox;
 import app.repository.OutboxRepository;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.support.SendResult;
 import org.springframework.scheduling.annotation.Scheduled;
