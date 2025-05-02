@@ -22,3 +22,23 @@ spring:
       value-serializer: org.apache.kafka.common.serialization.StringSerializer
 
 my-topic: topic1
+
+management:
+  metrics:
+    export:
+      prometheus:
+        enabled: true
+    distribution:
+      percentiles-histogram:
+        all: true
+    tags:
+      service: "user-service"
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+        exclude: shutdown
+      base-path: "/actuator"
+  info:
+    env:
+      enabled: true
